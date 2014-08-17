@@ -64,13 +64,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\TorqueServer.Domain\TorqueServer.Domain.csproj">
+      <Project>{608505D2-6232-4CB9-A1EE-711AF90160DD}</Project>
+      <Name>TorqueServer.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\TorqueServer.Web\TorqueServer.Web.csproj">
       <Project>{E3342D4E-4369-4411-9DDC-F2BB48B67A9E}</Project>
       <Name>TorqueServer.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\TorqueServer.Domain\TorqueServer.Domain.csproj">
-      <Project>{608505D2-6232-4CB9-A1EE-711AF90160DD}</Project>
-      <Name>TorqueServer.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

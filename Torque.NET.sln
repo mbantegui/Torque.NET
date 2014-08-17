@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TorqueServer.Web", "src\Tor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TorqueServer.Web.Tests", "test\TorqueServer.Web.Tests\TorqueServer.Web.Tests.csproj", "{1E442032-17F7-4A08-9D5B-A8C6D88080CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TorqueServer.Domain", "TorqueServer.Domain\TorqueServer.Domain.csproj", "{608505D2-6232-4CB9-A1EE-711AF90160DD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TorqueServer.Domain", "src\TorqueServer.Domain\TorqueServer.Domain.csproj", "{608505D2-6232-4CB9-A1EE-711AF90160DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
