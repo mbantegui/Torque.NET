@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Metadata;
 using System.Web.Http.Metadata.Providers;
@@ -59,6 +60,36 @@ namespace TorqueServer.Web.Tests.Models
 
                 // Assert
                 Assert.IsType<RawUpload>(modelBindingContext.Model);
+            }
+
+            [Fact]
+            public void SetsTheEmailAddressPropertyToQueryStringValue()
+            {
+                // Arrange
+                var rawUploadModelBinder = new RawUploadModelBinder();
+
+                var httpRequestMessage = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("http://localhost/api/Upload?eml=email@test.com")
+                };
+
+                var httpActionContext = new HttpActionContext
+                {
+                    ControllerContext = new HttpControllerContext
+                    {
+                        Request = httpRequestMessage
+                    }
+                };
+
+                var modelMetadata = new ModelMetadata(new EmptyModelMetadataProvider(), typeof(object), null, typeof(RawUpload), null);
+                var modelBindingContext = new ModelBindingContext { ModelMetadata = modelMetadata };
+
+                // Act
+                rawUploadModelBinder.BindModel(httpActionContext, modelBindingContext);
+
+                // Assert
+                var model = (RawUpload) modelBindingContext.Model;
+                Assert.Equal(model.EmailAddress, "email@test.com");
             }
         }
     }

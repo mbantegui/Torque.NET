@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Net.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.ModelBinding;
 using TorqueServer.Domain.Uploads;
@@ -16,7 +18,13 @@ namespace TorqueServer.Web.Models
                 return false;
             }
 
-            bindingContext.Model = new RawUpload();
+            var queryString = actionContext.Request.GetQueryNameValuePairs()
+                                           .ToDictionary(pair => pair.Key, pair => pair.Value);
+
+            bindingContext.Model = new RawUpload
+            {
+                EmailAddress = queryString["eml"]
+            };
 
             return true;
         }
