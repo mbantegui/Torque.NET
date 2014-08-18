@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Metadata;
@@ -288,7 +289,7 @@ namespace TorqueServer.Web.Tests.Models
             }
 
             [Fact]
-            public void SetsTheRecordedOnPropertyToTheMinDateTimeValueIfTheQueryStringValueIsNotPresent()
+            public void SetsTheRecordedOnPropertyToTheLinuxEpochStartTimeValueIfTheQueryStringValueIsNotPresent()
             {
                 // Arrange
                 var rawUploadModelBinder = new RawUploadModelBinder();
@@ -314,7 +315,41 @@ namespace TorqueServer.Web.Tests.Models
 
                 // Assert
                 var model = (RawUpload)modelBindingContext.Model;
-                Assert.Equal(model.RecordedOn, DateTime.MinValue);
+                Assert.Equal(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), model.RecordedOn);
+            }
+
+            [Fact]
+            public void SetsTheReadingsPropertyToTheKPrefixedQueryStringValues()
+            {
+                // Arrange
+                var rawUploadModelBinder = new RawUploadModelBinder();
+
+                var httpRequestMessage = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("http://localhost/api/Upload?kff1005=-73&kff1006=40&asdf=foo")
+                };
+
+                var httpActionContext = new HttpActionContext
+                {
+                    ControllerContext = new HttpControllerContext
+                    {
+                        Request = httpRequestMessage
+                    }
+                };
+
+                var modelMetadata = new ModelMetadata(new EmptyModelMetadataProvider(), typeof(object), null, typeof(RawUpload), null);
+                var modelBindingContext = new ModelBindingContext { ModelMetadata = modelMetadata };
+
+                // Act
+                rawUploadModelBinder.BindModel(httpActionContext, modelBindingContext);
+
+                // Assert
+                var model = (RawUpload)modelBindingContext.Model;
+                Assert.Equal(new Dictionary<string, double>
+                {
+                    { "kff1005", -73.0 },
+                    { "kff1006", 40.0 }
+                }, model.Readings);
             }
         }
     }
