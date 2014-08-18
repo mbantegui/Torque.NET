@@ -16,7 +16,7 @@ namespace TorqueServer.Web.Models
                 return false;
             }
 
-            throw new System.NotImplementedException();
+            return true;
         }
     }
 }

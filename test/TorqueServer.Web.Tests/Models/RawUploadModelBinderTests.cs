@@ -2,6 +2,7 @@
 using System.Web.Http.Metadata;
 using System.Web.Http.Metadata.Providers;
 using System.Web.Http.ModelBinding;
+using TorqueServer.Domain.Uploads;
 using TorqueServer.Web.Models;
 using Xunit;
 
@@ -25,6 +26,22 @@ namespace TorqueServer.Web.Tests.Models
 
                 // Assert
                 Assert.False(isBound);
+            }
+
+            [Fact]
+            public void ReturnTrueIfTheModelTypeIsRawUpload()
+            {
+                // Arrange
+                var rawUploadModelBinder = new RawUploadModelBinder();
+
+                var modelMetadata = new ModelMetadata(new EmptyModelMetadataProvider(), typeof(object), null, typeof(RawUpload), null);
+                var modelBindingContext = new ModelBindingContext { ModelMetadata = modelMetadata };
+
+                // Act
+                var isBound = rawUploadModelBinder.BindModel(new HttpActionContext(), modelBindingContext);
+
+                // Assert
+                Assert.True(isBound);
             }
         }
     }
