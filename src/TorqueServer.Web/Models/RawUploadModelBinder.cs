@@ -16,6 +16,8 @@ namespace TorqueServer.Web.Models
                 return false;
             }
 
+            bindingContext.Model = new RawUpload();
+
             return true;
         }
     }
