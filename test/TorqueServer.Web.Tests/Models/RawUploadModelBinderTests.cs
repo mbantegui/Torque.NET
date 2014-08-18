@@ -32,7 +32,7 @@ namespace TorqueServer.Web.Tests.Models
             }
 
             [Fact]
-            public void ReturnTrueIfTheModelTypeIsRawUpload()
+            public void ReturnsFalseIfTheVersionQueryStringParameterIsNotEqualToSeven()
             {
                 // Arrange
                 var rawUploadModelBinder = new RawUploadModelBinder();
@@ -41,7 +41,31 @@ namespace TorqueServer.Web.Tests.Models
                 {
                     ControllerContext = new HttpControllerContext
                     {
-                        Request = new HttpRequestMessage()
+                        Request = new HttpRequestMessage { RequestUri = new Uri("http://localhost/Upload?v=6") }
+                    }
+                };
+
+                var modelMetadata = new ModelMetadata(new EmptyModelMetadataProvider(), typeof(object), null, typeof(RawUpload), null);
+                var modelBindingContext = new ModelBindingContext { ModelMetadata = modelMetadata };
+
+                // Act
+                var isBound = rawUploadModelBinder.BindModel(httpActionContext, modelBindingContext);
+
+                // Assert
+                Assert.False(isBound);
+            }
+
+            [Fact]
+            public void ReturnsTrueIfTheModelTypeIsRawUploadAndTheVersionIsEqualToSeven()
+            {
+                // Arrange
+                var rawUploadModelBinder = new RawUploadModelBinder();
+
+                var httpActionContext = new HttpActionContext
+                {
+                    ControllerContext = new HttpControllerContext
+                    {
+                        Request = new HttpRequestMessage { RequestUri = new Uri("http://localhost/Upload?v=7" ) }
                     }
                 };
 
@@ -65,7 +89,7 @@ namespace TorqueServer.Web.Tests.Models
                 {
                     ControllerContext = new HttpControllerContext
                     {
-                        Request = new HttpRequestMessage()
+                        Request = new HttpRequestMessage { RequestUri = new Uri("http://localhost/Upload?v=7") }
                     }
                 };
                 var modelMetadata = new ModelMetadata(new EmptyModelMetadataProvider(), typeof(object), null, typeof(RawUpload), null);
@@ -86,7 +110,7 @@ namespace TorqueServer.Web.Tests.Models
 
                 var httpRequestMessage = new HttpRequestMessage
                 {
-                    RequestUri = new Uri("http://localhost/api/Upload?eml=email@test.com")
+                    RequestUri = new Uri("http://localhost/api/Upload?v=7&eml=email@test.com")
                 };
 
                 var httpActionContext = new HttpActionContext
@@ -116,7 +140,7 @@ namespace TorqueServer.Web.Tests.Models
 
                 var httpRequestMessage = new HttpRequestMessage
                 {
-                    RequestUri = new Uri("http://localhost/api/Upload")
+                    RequestUri = new Uri("http://localhost/api/Upload?v=7")
                 };
 
                 var httpActionContext = new HttpActionContext
@@ -146,7 +170,7 @@ namespace TorqueServer.Web.Tests.Models
 
                 var httpRequestMessage = new HttpRequestMessage
                 {
-                    RequestUri = new Uri("http://localhost/api/Upload?session=9223372036853775807")
+                    RequestUri = new Uri("http://localhost/api/Upload?v=7&session=9223372036853775807")
                 };
 
                 var httpActionContext = new HttpActionContext
@@ -176,7 +200,7 @@ namespace TorqueServer.Web.Tests.Models
 
                 var httpRequestMessage = new HttpRequestMessage
                 {
-                    RequestUri = new Uri("http://localhost/api/Upload")
+                    RequestUri = new Uri("http://localhost/api/Upload?v=7")
                 };
 
                 var httpActionContext = new HttpActionContext
@@ -206,7 +230,7 @@ namespace TorqueServer.Web.Tests.Models
 
                 var httpRequestMessage = new HttpRequestMessage
                 {
-                    RequestUri = new Uri("http://localhost/api/Upload?id=015c61e58c1dc0e307ecd1a2f7c75cfd")
+                    RequestUri = new Uri("http://localhost/api/Upload?v=7&id=015c61e58c1dc0e307ecd1a2f7c75cfd")
                 };
 
                 var httpActionContext = new HttpActionContext
@@ -236,7 +260,7 @@ namespace TorqueServer.Web.Tests.Models
 
                 var httpRequestMessage = new HttpRequestMessage
                 {
-                    RequestUri = new Uri("http://localhost/api/Upload")
+                    RequestUri = new Uri("http://localhost/api/Upload?v=7")
                 };
 
                 var httpActionContext = new HttpActionContext
@@ -266,7 +290,7 @@ namespace TorqueServer.Web.Tests.Models
 
                 var httpRequestMessage = new HttpRequestMessage
                 {
-                    RequestUri = new Uri("http://localhost/api/Upload?time=1388586600")
+                    RequestUri = new Uri("http://localhost/api/Upload?v=7&time=1388586600")
                 };
 
                 var httpActionContext = new HttpActionContext
@@ -296,7 +320,7 @@ namespace TorqueServer.Web.Tests.Models
 
                 var httpRequestMessage = new HttpRequestMessage
                 {
-                    RequestUri = new Uri("http://localhost/api/Upload")
+                    RequestUri = new Uri("http://localhost/api/Upload?v=7")
                 };
 
                 var httpActionContext = new HttpActionContext
@@ -326,7 +350,7 @@ namespace TorqueServer.Web.Tests.Models
 
                 var httpRequestMessage = new HttpRequestMessage
                 {
-                    RequestUri = new Uri("http://localhost/api/Upload?kff1005=-73&kff1006=40&asdf=foo")
+                    RequestUri = new Uri("http://localhost/api/Upload?v=7&kff1005=-73&kff1006=40&asdf=foo")
                 };
 
                 var httpActionContext = new HttpActionContext

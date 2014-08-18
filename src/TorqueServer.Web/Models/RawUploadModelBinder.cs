@@ -22,6 +22,11 @@ namespace TorqueServer.Web.Models
             var queryString = actionContext.Request.GetQueryNameValuePairs()
                                            .ToDictionary(pair => pair.Key, pair => pair.Value);
 
+            if (GetQueryStringValue<int>(queryString, "v") != 7)
+            {
+                return false;
+            }
+
             bindingContext.Model = new RawUpload
             {
                 EmailAddress = GetQueryStringValue<string>(queryString, "eml"),
