@@ -227,6 +227,35 @@ namespace TorqueServer.Web.Tests.Models
                 Assert.Equal(model.CorrelationID, "015c61e58c1dc0e307ecd1a2f7c75cfd");
             }
 
+            [Fact]
+            public void SetsTheCorrelationIDPropertyToNullIfTheQueryStringValueIsNotPresent()
+            {
+                // Arrange
+                var rawUploadModelBinder = new RawUploadModelBinder();
+
+                var httpRequestMessage = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("http://localhost/api/Upload")
+                };
+
+                var httpActionContext = new HttpActionContext
+                {
+                    ControllerContext = new HttpControllerContext
+                    {
+                        Request = httpRequestMessage
+                    }
+                };
+
+                var modelMetadata = new ModelMetadata(new EmptyModelMetadataProvider(), typeof(object), null, typeof(RawUpload), null);
+                var modelBindingContext = new ModelBindingContext { ModelMetadata = modelMetadata };
+
+                // Act
+                rawUploadModelBinder.BindModel(httpActionContext, modelBindingContext);
+
+                // Assert
+                var model = (RawUpload)modelBindingContext.Model;
+                Assert.Null(model.CorrelationID);
+            }
         }
     }
 }
