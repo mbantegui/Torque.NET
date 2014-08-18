@@ -36,11 +36,19 @@ namespace TorqueServer.Web.Tests.Models
                 // Arrange
                 var rawUploadModelBinder = new RawUploadModelBinder();
 
+                var httpActionContext = new HttpActionContext
+                {
+                    ControllerContext = new HttpControllerContext
+                    {
+                        Request = new HttpRequestMessage()
+                    }
+                };
+
                 var modelMetadata = new ModelMetadata(new EmptyModelMetadataProvider(), typeof(object), null, typeof(RawUpload), null);
                 var modelBindingContext = new ModelBindingContext { ModelMetadata = modelMetadata };
 
                 // Act
-                var isBound = rawUploadModelBinder.BindModel(new HttpActionContext(), modelBindingContext);
+                var isBound = rawUploadModelBinder.BindModel(httpActionContext, modelBindingContext);
 
                 // Assert
                 Assert.True(isBound);
@@ -52,18 +60,25 @@ namespace TorqueServer.Web.Tests.Models
                 // Arrange
                 var rawUploadModelBinder = new RawUploadModelBinder();
 
+                var httpActionContext = new HttpActionContext
+                {
+                    ControllerContext = new HttpControllerContext
+                    {
+                        Request = new HttpRequestMessage()
+                    }
+                };
                 var modelMetadata = new ModelMetadata(new EmptyModelMetadataProvider(), typeof(object), null, typeof(RawUpload), null);
                 var modelBindingContext = new ModelBindingContext { ModelMetadata = modelMetadata };
 
                 // Act
-                rawUploadModelBinder.BindModel(new HttpActionContext(), modelBindingContext);
+                rawUploadModelBinder.BindModel(httpActionContext, modelBindingContext);
 
                 // Assert
                 Assert.IsType<RawUpload>(modelBindingContext.Model);
             }
 
             [Fact]
-            public void SetsTheEmailAddressPropertyToQueryStringValue()
+            public void SetsTheEmailAddressPropertyToTheQueryStringValue()
             {
                 // Arrange
                 var rawUploadModelBinder = new RawUploadModelBinder();
@@ -90,6 +105,36 @@ namespace TorqueServer.Web.Tests.Models
                 // Assert
                 var model = (RawUpload) modelBindingContext.Model;
                 Assert.Equal(model.EmailAddress, "email@test.com");
+            }
+
+            [Fact]
+            public void SetsTheEmailAddressPropertyToNullIfTheQueryStringValueIsNotPresent()
+            {
+                // Arrange
+                var rawUploadModelBinder = new RawUploadModelBinder();
+
+                var httpRequestMessage = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("http://localhost/api/Upload")
+                };
+
+                var httpActionContext = new HttpActionContext
+                {
+                    ControllerContext = new HttpControllerContext
+                    {
+                        Request = httpRequestMessage
+                    }
+                };
+
+                var modelMetadata = new ModelMetadata(new EmptyModelMetadataProvider(), typeof(object), null, typeof(RawUpload), null);
+                var modelBindingContext = new ModelBindingContext { ModelMetadata = modelMetadata };
+
+                // Act
+                rawUploadModelBinder.BindModel(httpActionContext, modelBindingContext);
+
+                // Assert
+                var model = (RawUpload)modelBindingContext.Model;
+                Assert.Null(model.EmailAddress);
             }
         }
     }

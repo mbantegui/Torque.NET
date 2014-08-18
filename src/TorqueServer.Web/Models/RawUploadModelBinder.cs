@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Http.Controllers;
@@ -23,10 +24,17 @@ namespace TorqueServer.Web.Models
 
             bindingContext.Model = new RawUpload
             {
-                EmailAddress = queryString["eml"]
+                EmailAddress = GetQueryStringValue(queryString, "eml")
             };
 
             return true;
         }
+
+        private static string GetQueryStringValue(IDictionary<string, string> values, string key)
+        {
+            string value;
+            return values.TryGetValue(key, out value) ? value : null;
+        }
+
     }
 }
