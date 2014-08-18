@@ -26,7 +26,8 @@ namespace TorqueServer.Web.Models
             {
                 EmailAddress = GetQueryStringValue<string>(queryString, "eml"),
                 SessionID = GetQueryStringValue<long>(queryString, "session"),
-                CorrelationID = GetQueryStringValue<string>(queryString, "id")
+                CorrelationID = GetQueryStringValue<string>(queryString, "id"),
+                RecordedOn = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).Add(TimeSpan.FromSeconds(GetQueryStringValue<long>(queryString, "time")))
             };
 
             return true;

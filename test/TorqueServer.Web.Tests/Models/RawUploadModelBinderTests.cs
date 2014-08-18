@@ -256,6 +256,66 @@ namespace TorqueServer.Web.Tests.Models
                 var model = (RawUpload)modelBindingContext.Model;
                 Assert.Null(model.CorrelationID);
             }
+
+            [Fact]
+            public void SetsTheRecordedOnPropertyToTheQueryStringValue()
+            {
+                // Arrange
+                var rawUploadModelBinder = new RawUploadModelBinder();
+
+                var httpRequestMessage = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("http://localhost/api/Upload?time=1388586600")
+                };
+
+                var httpActionContext = new HttpActionContext
+                {
+                    ControllerContext = new HttpControllerContext
+                    {
+                        Request = httpRequestMessage
+                    }
+                };
+
+                var modelMetadata = new ModelMetadata(new EmptyModelMetadataProvider(), typeof(object), null, typeof(RawUpload), null);
+                var modelBindingContext = new ModelBindingContext { ModelMetadata = modelMetadata };
+
+                // Act
+                rawUploadModelBinder.BindModel(httpActionContext, modelBindingContext);
+
+                // Assert
+                var model = (RawUpload)modelBindingContext.Model;
+                Assert.Equal(new DateTime(2014, 1, 1, 14, 30, 0, 0, DateTimeKind.Utc), model.RecordedOn);
+            }
+
+            [Fact]
+            public void SetsTheRecordedOnPropertyToTheMinDateTimeValueIfTheQueryStringValueIsNotPresent()
+            {
+                // Arrange
+                var rawUploadModelBinder = new RawUploadModelBinder();
+
+                var httpRequestMessage = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("http://localhost/api/Upload")
+                };
+
+                var httpActionContext = new HttpActionContext
+                {
+                    ControllerContext = new HttpControllerContext
+                    {
+                        Request = httpRequestMessage
+                    }
+                };
+
+                var modelMetadata = new ModelMetadata(new EmptyModelMetadataProvider(), typeof(object), null, typeof(RawUpload), null);
+                var modelBindingContext = new ModelBindingContext { ModelMetadata = modelMetadata };
+
+                // Act
+                rawUploadModelBinder.BindModel(httpActionContext, modelBindingContext);
+
+                // Assert
+                var model = (RawUpload)modelBindingContext.Model;
+                Assert.Equal(model.RecordedOn, DateTime.MinValue);
+            }
         }
     }
 }
