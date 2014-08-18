@@ -24,17 +24,29 @@ namespace TorqueServer.Web.Models
 
             bindingContext.Model = new RawUpload
             {
-                EmailAddress = GetQueryStringValue(queryString, "eml")
+                EmailAddress = GetQueryStringValue<string>(queryString, "eml"),
+                SessionID = GetQueryStringValue<long>(queryString, "session")
             };
 
             return true;
         }
 
-        private static string GetQueryStringValue(IDictionary<string, string> values, string key)
+        private static T GetQueryStringValue<T>(IDictionary<string, string> values, string key)
         {
             string value;
-            return values.TryGetValue(key, out value) ? value : null;
+            return values.TryGetValue(key, out value) ? TryConvert<T>(value) : default(T);
         }
 
+        private static T TryConvert<T>(string value)
+        {
+            try
+            {
+                return (T)Convert.ChangeType(value, typeof(T));
+            }
+            catch
+            {
+                return default(T);
+            }
+        }
     }
 }
