@@ -32,7 +32,7 @@ namespace TorqueServer.Web.Models
                 EmailAddress = GetQueryStringValue<string>(queryString, "eml"),
                 SessionID = GetQueryStringValue<long>(queryString, "session"),
                 CorrelationID = GetQueryStringValue<string>(queryString, "id"),
-                RecordedOn = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).Add(TimeSpan.FromSeconds(GetQueryStringValue<long>(queryString, "time"))),
+                RecordedOn = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).Add(TimeSpan.FromMilliseconds(GetQueryStringValue<long>(queryString, "time"))),
                 Readings = queryString.Where(pair => pair.Key.StartsWith("k"))
                                       .ToDictionary(pair => pair.Key, pair => TryConvert<double>(pair.Value))
             };

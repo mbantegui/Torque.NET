@@ -290,7 +290,7 @@ namespace TorqueServer.Web.Tests.Models
 
                 var httpRequestMessage = new HttpRequestMessage
                 {
-                    RequestUri = new Uri("http://localhost/api/Upload?v=7&time=1388586600")
+                    RequestUri = new Uri("http://localhost/api/Upload?v=7&time=1388586600350")
                 };
 
                 var httpActionContext = new HttpActionContext
@@ -309,7 +309,7 @@ namespace TorqueServer.Web.Tests.Models
 
                 // Assert
                 var model = (RawUpload)modelBindingContext.Model;
-                Assert.Equal(new DateTime(2014, 1, 1, 14, 30, 0, 0, DateTimeKind.Utc), model.RecordedOn);
+                Assert.Equal(new DateTime(2014, 1, 1, 14, 30, 0, 350, DateTimeKind.Utc), model.RecordedOn);
             }
 
             [Fact]
