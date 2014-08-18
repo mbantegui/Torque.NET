@@ -104,7 +104,7 @@ namespace TorqueServer.Web.Tests.Models
 
                 // Assert
                 var model = (RawUpload) modelBindingContext.Model;
-                Assert.Equal(model.EmailAddress, "email@test.com");
+                Assert.Equal("email@test.com", model.EmailAddress);
             }
 
             [Fact]
@@ -164,7 +164,7 @@ namespace TorqueServer.Web.Tests.Models
 
                 // Assert
                 var model = (RawUpload)modelBindingContext.Model;
-                Assert.Equal(model.SessionID, 9223372036853775807);
+                Assert.Equal(9223372036853775807, model.SessionID);
             }
 
             [Fact]
@@ -224,7 +224,7 @@ namespace TorqueServer.Web.Tests.Models
 
                 // Assert
                 var model = (RawUpload)modelBindingContext.Model;
-                Assert.Equal(model.CorrelationID, "015c61e58c1dc0e307ecd1a2f7c75cfd");
+                Assert.Equal("015c61e58c1dc0e307ecd1a2f7c75cfd", model.CorrelationID);
             }
 
             [Fact]
