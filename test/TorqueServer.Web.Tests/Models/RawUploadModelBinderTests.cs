@@ -166,6 +166,36 @@ namespace TorqueServer.Web.Tests.Models
                 var model = (RawUpload)modelBindingContext.Model;
                 Assert.Equal(model.SessionID, 9223372036853775807);
             }
+
+            [Fact]
+            public void SetsTheSessionIDPropertyToZeroIfTheQueryStringValueIsNotPresent()
+            {
+                // Arrange
+                var rawUploadModelBinder = new RawUploadModelBinder();
+
+                var httpRequestMessage = new HttpRequestMessage
+                {
+                    RequestUri = new Uri("http://localhost/api/Upload")
+                };
+
+                var httpActionContext = new HttpActionContext
+                {
+                    ControllerContext = new HttpControllerContext
+                    {
+                        Request = httpRequestMessage
+                    }
+                };
+
+                var modelMetadata = new ModelMetadata(new EmptyModelMetadataProvider(), typeof(object), null, typeof(RawUpload), null);
+                var modelBindingContext = new ModelBindingContext { ModelMetadata = modelMetadata };
+
+                // Act
+                rawUploadModelBinder.BindModel(httpActionContext, modelBindingContext);
+
+                // Assert
+                var model = (RawUpload)modelBindingContext.Model;
+                Assert.Equal(model.SessionID, 0);
+            }
         }
     }
 }
