@@ -25,7 +25,8 @@ namespace TorqueServer.Web.Models
             bindingContext.Model = new RawUpload
             {
                 EmailAddress = GetQueryStringValue<string>(queryString, "eml"),
-                SessionID = GetQueryStringValue<long>(queryString, "session")
+                SessionID = GetQueryStringValue<long>(queryString, "session"),
+                CorrelationID = GetQueryStringValue<string>(queryString, "id")
             };
 
             return true;
